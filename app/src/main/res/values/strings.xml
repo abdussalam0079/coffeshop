@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">coffeshop2</string>
+    <string name="CHOOSE" />
+    <string name="choose_your_favorite_coffee">Choose your favorite coffee</string>
+    <string name="get_started">Get Started</string>
+    <string name="Search_Anything">Search Anything...</string>
+
+    <!-- Strings extracted from activity_main2.xml -->
+    <string name="welcome_user">hi user welcome back</string>
+    <string name="categories">Categories</string>
+    <string name="popular_coffees">Popular Coffees</string>
+    <string name="see_all">See all</string>
+    <string name="nav_explore">Explore</string>
+    <string name="nav_cart">Cart</string>
+    <string name="nav_wishlist">Wishlist</string>
+    <string name="nav_my_order">My Order</string>
+    <string name="nav_profile">Order</string>
+
+
+    <!-- <string name="app_name">Coffee Shop</string> -->
+
+    <!-- <string name="Search_Anything">Search Anything</string> -->
+
+    <!-- <string name="app_name">Coffee Shop</string> -->
+
+    <!-- <string name="Search_Anything">Search Anything</string> -->
 </resources>

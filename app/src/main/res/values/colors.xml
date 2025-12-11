@@ -7,4 +7,23 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Primary Colors -->
+    <color name="orange">#FF8C42</color>
+    <color name="light_orange">#FFA94D</color>
+
+    <!-- Cream Shades -->
+    <color name="cream">#FFF2E2</color>
+    <color name="light_cream">#FFF9EC</color>
+
+    <!-- Grey Shades -->
+    <color name="grey">#5E5E5E</color>
+    <color name="light_grey">#E5E5E5</color>
+
+    <!-- Brown Shades -->
+    <color name="brown">#9C6644</color>
+    <color name="light_brown">#C68B59</color>
+
+    <!-- Dark Brown Shades -->
+    <color name="dark_brown">#4B2E16</color>
+    <color name="deep_brown">#3B2419</color>
 </resources>
