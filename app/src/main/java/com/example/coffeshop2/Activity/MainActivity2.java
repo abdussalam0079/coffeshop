@@ -3,6 +3,8 @@ package com.example.coffeshop2.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -10,14 +12,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.coffeshop2.Domain.ItemModel;
 import com.example.coffeshop2.ViewModel.MainViewModel;
 import com.example.coffeshop2.databinding.ActivityMain2Binding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity2 extends AppCompatActivity {
 
     private ActivityMain2Binding binding;
     private MainViewModel viewModel;
     private Context ctx;
+    private List<ItemModel> allItems = new ArrayList<>();
+    private ItemAdapter searchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +40,7 @@ public class MainActivity2 extends AppCompatActivity {
         initCategory();
         initPopular();
         initBottomNav();
+        initSearch();
     }
 
     // =======================

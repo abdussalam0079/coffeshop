@@ -92,6 +92,19 @@
                     android:src="@drawable/settings"/>
             </LinearLayout>
 
+            <!-- SEARCH RESULTS RECYCLERVIEW -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchResultsRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/searchBar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/banner" />
+
             <!-- BANNER -->
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/banner"
