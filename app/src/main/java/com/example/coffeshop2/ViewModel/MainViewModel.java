@@ -7,6 +7,7 @@ import com.example.coffeshop2.Domain.BannerModel;
 import com.example.coffeshop2.Domain.CategoryModel;
 import com.example.coffeshop2.Domain.PopularModel;
 import com.example.coffeshop2.Domain.ItemModel;
+import com.example.coffeshop2.Domain.OrderModel;
 import com.example.coffeshop2.Repository.MainRepositry;
 
 import java.util.List;
@@ -29,6 +30,10 @@ public class MainViewModel extends ViewModel {
 
     public LiveData<List<ItemModel>> getItems() {
         return repo.loadItems();
+    }
+
+    public LiveData<List<OrderModel>> getOrders(String userId) {
+        return repo.loadOrders(userId);
     }
 
     @Override

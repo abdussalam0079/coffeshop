@@ -4,6 +4,7 @@ import java.util.List;
 
 public class OrderModel {
     private String orderId;
+    private String userId; // User ID for organizing orders by user
     private String customerName;
     private String customerPhone;
     private String customerEmail;
@@ -22,10 +23,11 @@ public class OrderModel {
         // Required empty constructor for Firebase
     }
 
-    public OrderModel(String orderId, String customerName, String customerPhone, String customerEmail,
+    public OrderModel(String orderId, String userId, String customerName, String customerPhone, String customerEmail,
                      String deliveryAddress, List<CartModel> items, double subtotal, double deliveryFee,
                      double tax, double total, String discountCode, String status, long timestamp, String notes) {
         this.orderId = orderId;
+        this.userId = userId;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
         this.customerEmail = customerEmail;
@@ -43,6 +45,7 @@ public class OrderModel {
 
     // Getters
     public String getOrderId() { return orderId; }
+    public String getUserId() { return userId; }
     public String getCustomerName() { return customerName; }
     public String getCustomerPhone() { return customerPhone; }
     public String getCustomerEmail() { return customerEmail; }
@@ -59,6 +62,7 @@ public class OrderModel {
 
     // Setters
     public void setOrderId(String orderId) { this.orderId = orderId; }
+    public void setUserId(String userId) { this.userId = userId; }
     public void setCustomerName(String customerName) { this.customerName = customerName; }
     public void setCustomerPhone(String customerPhone) { this.customerPhone = customerPhone; }
     public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }

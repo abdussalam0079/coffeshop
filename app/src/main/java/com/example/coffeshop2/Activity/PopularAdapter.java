@@ -41,19 +41,38 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.PopularV
     @Override
     public void onBindViewHolder(@NonNull PopularViewHolder holder, int position) {
         PopularModel model = list.get(position);
+        
+        if (model == null) {
+            return;
+        }
 
-        holder.title.setText(model.getTitle());
-        holder.extra.setText(model.getExtra());
-        holder.price.setText(String.format("$%.1f", model.getPrice()));
+        // Set title with null check
+        holder.title.setText(model.getTitle() != null ? model.getTitle() : "");
+        
+        // Set extra with null check
+        if (model.getExtra() != null && !model.getExtra().isEmpty()) {
+            holder.extra.setText(model.getExtra());
+            holder.extra.setVisibility(View.VISIBLE);
+        } else {
+            holder.extra.setVisibility(View.GONE);
+        }
+        
+        // Set price with proper formatting
+        holder.price.setText(String.format("$%.2f", model.getPrice()));
+        
+        // Set rating
         holder.ratingBar.setRating((float) model.getRating());
 
         String imageUrl = (model.getPicUrl() != null && !model.getPicUrl().isEmpty())
                 ? model.getPicUrl().get(0)
                 : null;
 
-        if (imageUrl != null) {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(context)
                     .load(imageUrl)
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_foreground)
+                    .centerCrop()
                     .into(holder.image);
         } else {
             holder.image.setImageResource(R.drawable.ic_launcher_foreground);

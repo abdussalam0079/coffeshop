@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +34,7 @@ import java.util.List;
 
 public class RecommendationActivity extends AppCompatActivity {
 
+    private static final String TAG = "RecommendationActivity";
     private static final int CAMERA_REQUEST = 100;
     private static final int PERMISSION_REQUEST_CAMERA = 200;
     
@@ -126,13 +128,13 @@ public class RecommendationActivity extends AppCompatActivity {
         binding.progressBarMood.setVisibility(View.VISIBLE);
         binding.takeSelfieButton.setEnabled(false);
 
-        // Detect mood and get recommendation using MoodDetector
-        Pair<String, String> recommendation = MoodDetector.getRecommendationFromImage(capturedImage, this);
-        recommendedCoffee = recommendation.first;
-        recommendationDescription = recommendation.second;
-        
-        // Get detected mood for display (we need to detect it separately)
-        detectedMood = MoodDetector.detectMood(capturedImage, this);
+        // Detect mood and get recommendation in one call to keep them consistent
+        MoodDetector.MoodRecommendationResult result = MoodDetector.detectAndRecommend(capturedImage, this);
+        recommendedCoffee = result.recommendation.first;
+        recommendationDescription = result.recommendation.second;
+        detectedMood = result.moodLabel;
+        Log.d(TAG, "RawIdx=" + result.rawEmotionIndex + " Bucket=" + result.moodBucket +
+                " Mood=" + detectedMood + " Coffee=" + recommendedCoffee + " Desc=" + recommendationDescription);
 
         // Display mood and recommendation
         binding.moodResultText.setVisibility(View.VISIBLE);

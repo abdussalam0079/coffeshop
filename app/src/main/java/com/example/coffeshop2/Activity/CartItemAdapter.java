@@ -45,17 +45,28 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartVi
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         CartModel model = list.get(position);
+        
+        if (model == null) {
+            return;
+        }
 
-        holder.title.setText(model.getTitle());
-        holder.originalPrice.setText(String.format("$%.0f", model.getOriginalPrice()));
+        // Set title with null check
+        holder.title.setText(model.getTitle() != null ? model.getTitle() : "");
+        
+        // Set prices with proper formatting
+        holder.originalPrice.setText(String.format("$%.2f", model.getOriginalPrice()));
         // Apply strikethrough to original price
         holder.originalPrice.setPaintFlags(holder.originalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        holder.currentPrice.setText(String.format("$%.0f", model.getTotalPrice()));
+        holder.currentPrice.setText(String.format("$%.2f", model.getTotalPrice()));
         holder.quantityText.setText(String.valueOf(model.getQuantity()));
 
+        // Load image with placeholder and error handling
         if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
             Glide.with(context)
                     .load(model.getImageUrl())
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_foreground)
+                    .centerCrop()
                     .into(holder.image);
         } else {
             holder.image.setImageResource(R.drawable.ic_launcher_foreground);

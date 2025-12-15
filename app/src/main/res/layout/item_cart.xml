@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Cappuccino"
+            android:text="@string/cart_item_placeholder_title"
             android:textColor="@color/dark_brown"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="$24"
+            android:text="@string/cart_item_placeholder_price"
             android:textColor="@color/brown"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@+id/cartItemTitle"
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="$48"
+            android:text="@string/cart_item_placeholder_price"
             android:textColor="@color/orange"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -78,21 +78,21 @@
                 android:id="@+id/cartQuantityMinus"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:text="-"
+                android:text="@string/cart_quantity_minus"
                 android:textColor="@color/dark_brown"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:contentDescription="Decrease quantity" />
+                android:contentDescription="@string/cart_desc_decrease" />
 
             <TextView
                 android:id="@+id/cartQuantityText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="12dp"
-                android:text="2"
+                android:text="@string/cart_quantity_default"
                 android:textColor="@color/dark_brown"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -103,14 +103,14 @@
                 android:id="@+id/cartQuantityPlus"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:text="+"
+                android:text="@string/cart_quantity_plus"
                 android:textColor="@color/dark_brown"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:contentDescription="Increase quantity" />
+                android:contentDescription="@string/cart_desc_increase" />
         </LinearLayout>
 
         <ImageView
@@ -122,7 +122,7 @@
             android:padding="8dp"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="Remove item"
+            android:contentDescription="@string/cart_desc_remove"
             app:tint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -130,4 +130,3 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
-

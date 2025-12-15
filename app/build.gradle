@@ -1,3 +1,5 @@
+import java.net.URL
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
@@ -29,6 +31,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        mlModelBinding true
     }
 }
 
@@ -40,6 +43,7 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.recyclerview
+    implementation libs.firebase.auth
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -47,5 +51,26 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
     
     // TensorFlow Lite
-    implementation 'org.tensorflow:tensorflow-lite:2.14.0'
+    implementation 'org.tensorflow:tensorflow-lite:2.17.0'
 }
+
+// Download a real pretrained emotion model into assets at build time.
+tasks.register("downloadEmotionModel") {
+    doLast {
+        def url = "https://github.com/onnx/models/raw/main/vision/body_analysis/emotion_ferplus/model/emotion-ferplus-8.tflite"
+        // Honor a user-provided model.tflite; only download if missing
+        def userModel = file("src/main/assets/model.tflite")
+        if (userModel.exists()) {
+            println "User-provided model.tflite found; skipping download."
+            return
+        }
+        def out = file("src/main/assets/emotion_model.tflite")
+        out.parentFile.mkdirs()
+        new URL(url).withInputStream { input ->
+            out.withOutputStream { output -> output << input }
+        }
+        println "Downloaded emotion model to ${out}"
+    }
+}
+
+preBuild.dependsOn(downloadEmotionModel)

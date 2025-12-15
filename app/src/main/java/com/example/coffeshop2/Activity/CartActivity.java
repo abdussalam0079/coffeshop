@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeshop2.Utils.CartManager;
+import com.example.coffeshop2.Utils.UserManager;
 import com.example.coffeshop2.Repository.MainRepositry;
 import com.example.coffeshop2.Domain.OrderModel;
 import com.example.coffeshop2.databinding.ActivityCartBinding;
@@ -84,10 +85,10 @@ public class CartActivity extends AppCompatActivity implements CartItemAdapter.O
     }
 
     private void updateCartSummary() {
-        binding.subtotalText.setText(String.format("$%.0f", cartManager.getSubtotal()));
-        binding.deliveryFeeText.setText(String.format("$%.0f", cartManager.getDeliveryFee()));
-        binding.taxText.setText(String.format("$%.0f", cartManager.getTax()));
-        binding.totalText.setText(String.format("$%.0f", cartManager.getTotal()));
+        binding.subtotalText.setText(String.format("$%.2f", cartManager.getSubtotal()));
+        binding.deliveryFeeText.setText(String.format("$%.2f", cartManager.getDeliveryFee()));
+        binding.taxText.setText(String.format("$%.2f", cartManager.getTax()));
+        binding.totalText.setText(String.format("$%.2f", cartManager.getTotal()));
 
         if (cartManager.getCartItemCount() == 0) {
             binding.recyclerViewCartItems.setVisibility(View.GONE);
@@ -142,9 +143,14 @@ public class CartActivity extends AppCompatActivity implements CartItemAdapter.O
         double tax = cartManager.getTax();
         double total = cartManager.getTotal();
 
+        // Get user ID
+        UserManager userManager = UserManager.getInstance(this);
+        String userId = userManager.getUserId();
+
         // Create order model
         OrderModel order = new OrderModel(
                 null, // Will be set by Firebase
+                userId, // User ID
                 "Customer", // Default customer name (can be updated later)
                 "", // Phone (can be added later)
                 "", // Email (can be added later)
@@ -160,8 +166,8 @@ public class CartActivity extends AppCompatActivity implements CartItemAdapter.O
                 "" // Notes
         );
 
-        // Save order to Firebase
-        MainRepositry.getInstance().saveOrder(order, task -> {
+        // Save order to Firebase with user-based structure
+        MainRepositry.getInstance().saveOrder(order, userId, task -> {
             binding.proceedToCheckoutButton.setEnabled(true);
             binding.proceedToCheckoutButton.setText("Place Order");
 
@@ -180,10 +186,34 @@ public class CartActivity extends AppCompatActivity implements CartItemAdapter.O
                 // Optionally navigate back or to order confirmation screen
                 // finish();
             } else {
-                String errorMessage = "Failed to place order. Please try again.";
+                String errorMessage = "Failed to place order.";
                 if (task.getException() != null) {
-                    errorMessage += "\nError: " + task.getException().getMessage();
-                    task.getException().printStackTrace();
+                    Exception exception = task.getException();
+                    String exceptionMessage = exception.getMessage();
+                    
+                    // Log full error for debugging
+                    android.util.Log.e("CartActivity", "Order save failed", exception);
+                    
+                    if (exceptionMessage != null) {
+                        if (exceptionMessage.toLowerCase().contains("permission") || 
+                            exceptionMessage.toLowerCase().contains("denied")) {
+                            errorMessage = "❌ Permission Denied!\n\n" +
+                                    "Please update Firebase Database Rules:\n\n" +
+                                    "1. Go to Firebase Console\n" +
+                                    "2. Realtime Database → Rules\n" +
+                                    "3. Use this rule:\n\n" +
+                                    "{\n" +
+                                    "  \"rules\": {\n" +
+                                    "    \".read\": true,\n" +
+                                    "    \".write\": true\n" +
+                                    "  }\n" +
+                                    "}\n\n" +
+                                    "Then click Publish!";
+                        } else {
+                            errorMessage = "Error: " + exceptionMessage;
+                        }
+                    }
+                    exception.printStackTrace();
                 }
                 Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
             }

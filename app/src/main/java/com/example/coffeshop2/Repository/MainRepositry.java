@@ -11,6 +11,7 @@ import com.example.coffeshop2.Domain.CategoryModel;
 import com.example.coffeshop2.Domain.PopularModel;
 import com.example.coffeshop2.Domain.ItemModel;
 import com.example.coffeshop2.Domain.OrderModel;
+import com.example.coffeshop2.Utils.UserManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +39,10 @@ public class MainRepositry {
 
     private MainRepositry() {
         firebaseDatabase = FirebaseDatabase.getInstance();
+        // Enable offline persistence (optional, helps with connectivity)
+        firebaseDatabase.setPersistenceEnabled(false);
+        // Set logging to debug mode
+        // FirebaseDatabase.getInstance().setLogLevel(Logger.Level.DEBUG);
     }
 
     public static synchronized MainRepositry getInstance() {
@@ -188,18 +194,140 @@ public class MainRepositry {
     }
 
     // =============================
-    // 🔥 SAVE ORDER TO FIREBASE
+    // 🔥 SAVE ORDER TO FIREBASE (User-based structure)
     // =============================
-    public void saveOrder(OrderModel order, OnCompleteListener<Void> listener) {
-        DatabaseReference ordersRef = firebaseDatabase.getReference("Orders");
-        DatabaseReference orderRef = ordersRef.push(); // Generate unique order ID
+    public void saveOrder(OrderModel order, String userId, OnCompleteListener<Void> listener) {
+        try {
+            // Structure: orders/{userId}/{orderId}
+            DatabaseReference ordersRef = firebaseDatabase.getReference("orders").child(userId);
+            DatabaseReference orderRef = ordersRef.push(); // Generate unique order ID
+            
+            // Set order ID and user ID
+            String orderId = orderRef.getKey();
+            if (orderId != null) {
+                order.setOrderId(orderId);
+                order.setUserId(userId);
+            }
+            
+            Log.d(TAG, "Attempting to save order with ID: " + orderId + " for user: " + userId);
+            Log.d(TAG, "Database URL: " + firebaseDatabase.getReference().toString());
+            Log.d(TAG, "Orders path: " + orderRef.toString());
+            
+            // Validate order data before saving
+            if (!validateOrder(order)) {
+                Log.e(TAG, "Order validation failed");
+                TaskCompletionSource<Void> taskSource = new TaskCompletionSource<>();
+                taskSource.setException(new Exception("Order validation failed: Invalid order data"));
+                listener.onComplete(taskSource.getTask());
+                return;
+            }
+            
+            // Save order to Firebase
+            orderRef.setValue(order)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Order saved successfully! Order ID: " + orderId + " for user: " + userId);
+                        } else {
+                            Exception exception = task.getException();
+                            if (exception != null) {
+                                Log.e(TAG, "Failed to save order: " + exception.getMessage(), exception);
+                                Log.e(TAG, "Exception class: " + exception.getClass().getName());
+                            } else {
+                                Log.e(TAG, "Failed to save order: Unknown error");
+                            }
+                        }
+                        listener.onComplete(task);
+                    });
+        } catch (Exception e) {
+            Log.e(TAG, "Exception while saving order", e);
+            // Create a failed task
+            TaskCompletionSource<Void> taskSource = new TaskCompletionSource<>();
+            taskSource.setException(e);
+            listener.onComplete(taskSource.getTask());
+        }
+    }
+
+    /**
+     * Validate order data before saving
+     */
+    private boolean validateOrder(OrderModel order) {
+        // Validate total is a number and positive
+        if (order.getTotal() <= 0) {
+            Log.e(TAG, "Invalid total: " + order.getTotal());
+            return false;
+        }
         
-        // Set order ID
-        order.setOrderId(orderRef.getKey());
+        // Validate status is from predefined list
+        String[] validStatuses = {"pending", "confirmed", "preparing", "ready", "delivered", "cancelled"};
+        boolean validStatus = false;
+        if (order.getStatus() != null) {
+            for (String status : validStatuses) {
+                if (status.equals(order.getStatus().toLowerCase())) {
+                    validStatus = true;
+                    break;
+                }
+            }
+        }
+        if (!validStatus) {
+            Log.e(TAG, "Invalid status: " + order.getStatus());
+            return false;
+        }
         
-        // Save order to Firebase
-        orderRef.setValue(order)
-                .addOnCompleteListener(listener);
+        // Validate items list is not empty
+        if (order.getItems() == null || order.getItems().isEmpty()) {
+            Log.e(TAG, "Order items list is empty");
+            return false;
+        }
+        
+        // Validate timestamp is positive
+        if (order.getTimestamp() <= 0) {
+            Log.e(TAG, "Invalid timestamp: " + order.getTimestamp());
+            return false;
+        }
+        
+        return true;
+    }
+
+    // =============================
+    // 🔥 LOAD ORDERS (REALTIME) - User-specific
+    // =============================
+    public LiveData<List<OrderModel>> loadOrders(String userId) {
+        MutableLiveData<List<OrderModel>> listData = new MutableLiveData<>();
+        // Structure: orders/{userId}
+        DatabaseReference ref = firebaseDatabase.getReference("orders").child(userId);
+
+        ref.orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<OrderModel> list = new ArrayList<>();
+
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    OrderModel item = child.getValue(OrderModel.class);
+                    if (item != null) {
+                        // Ensure orderId and userId are set
+                        if (item.getOrderId() == null || item.getOrderId().isEmpty()) {
+                            item.setOrderId(child.getKey());
+                        }
+                        if (item.getUserId() == null || item.getUserId().isEmpty()) {
+                            item.setUserId(userId);
+                        }
+                        list.add(item);
+                    }
+                }
+
+                // Sort by timestamp (newest first)
+                Collections.sort(list, (o1, o2) -> Long.compare(o2.getTimestamp(), o1.getTimestamp()));
+                listData.postValue(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Orders Cancelled: " + error.getMessage());
+                listData.postValue(Collections.emptyList());
+            }
+        });
+
+        return listData;
     }
 
 

@@ -1,0 +1,38 @@
+{
+  "rules": {
+    "Banner": {
+      ".read": true,
+      ".write": false
+    },
+    "Category": {
+      ".read": true,
+      ".write": false
+    },
+    "Popular": {
+      ".read": true,
+      ".write": false
+    },
+    "Items": {
+      ".read": true,
+      ".write": false
+    },
+    "orders": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid",
+        "$orderId": {
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": "auth != null && auth.uid == $uid",
+          ".validate": "newData.hasChildren(['orderId', 'userId', 'items', 'total', 'status', 'timestamp']) && newData.child('total').isNumber() && newData.child('total').val() > 0 && newData.child('status').val().matches(/pending|confirmed|preparing|ready|delivered|cancelled/) && newData.child('timestamp').isNumber() && newData.child('userId').val() == $uid"
+        }
+      }
+    },
+    "MoodRecommendations": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    }
+  }
+}
+

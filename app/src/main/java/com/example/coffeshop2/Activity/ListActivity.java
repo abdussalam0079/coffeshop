@@ -52,13 +52,14 @@ public class ListActivity extends AppCompatActivity {
 
     private void loadItems() {
         binding.progressBarItems.setVisibility(View.VISIBLE);
+        binding.recyclerViewItems.setVisibility(View.GONE);
 
         viewModel.getItems().observe(this, allItems -> {
             if (allItems != null) {
                 // Filter items by selected category
                 List<ItemModel> filteredItems = new ArrayList<>();
                 for (ItemModel item : allItems) {
-                    if (selectedCategoryId != null && selectedCategoryId.equals(item.getCategoryId())) {
+                    if (item != null && selectedCategoryId != null && selectedCategoryId.equals(item.getCategoryId())) {
                         filteredItems.add(item);
                     }
                 }
@@ -67,8 +68,14 @@ public class ListActivity extends AppCompatActivity {
                 binding.recyclerViewItems.setAdapter(adapter);
 
                 if (filteredItems.isEmpty()) {
+                    // Show empty state message
                     Toast.makeText(this, "No items found for this category", Toast.LENGTH_SHORT).show();
+                } else {
+                    binding.recyclerViewItems.setVisibility(View.VISIBLE);
+                    binding.recyclerViewItems.animate().alpha(1f).setDuration(300).start();
                 }
+            } else {
+                Toast.makeText(this, "Failed to load items. Please try again.", Toast.LENGTH_SHORT).show();
             }
             binding.progressBarItems.setVisibility(View.GONE);
         });

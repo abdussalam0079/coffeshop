@@ -25,7 +25,7 @@ public class MainActivity2 extends AppCompatActivity {
     private MainViewModel viewModel;
     private Context ctx;
     private List<ItemModel> allItems = new ArrayList<>();
-    private ItemAdapter searchAdapter;
+    private RecyclerView.Adapter<?> searchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,9 @@ public class MainActivity2 extends AppCompatActivity {
 
         ctx = this;
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        // Initialize user authentication (anonymous auth)
+        com.example.coffeshop2.Utils.UserManager.getInstance(this);
 
         initBanner();
         initCategory();
@@ -116,5 +119,113 @@ public class MainActivity2 extends AppCompatActivity {
 
         binding.navProfile.setOnClickListener(v ->
                 startActivity(new Intent(this, RecommendationActivity.class)));
+    }
+
+    // =======================
+    //  SEARCH FUNCTIONALITY
+    // =======================
+    private void initSearch() {
+        // Observe all items from ViewModel
+        viewModel.getItems().observe(this, items -> {
+            if (items != null && !items.isEmpty()) {
+                allItems = new ArrayList<>(items);
+            } else {
+                allItems = new ArrayList<>();
+            }
+        });
+
+        // Set up search results RecyclerView
+        binding.searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Set up TextWatcher for search input
+        binding.editTextText2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s.toString().trim();
+                if (query.isEmpty()) {
+                    showOriginalContent();
+                } else {
+                    List<ItemModel> filtered = performSearch(query);
+                    updateSearchResults(filtered);
+                    showSearchResults();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private List<ItemModel> performSearch(String query) {
+        List<ItemModel> filtered = new ArrayList<>();
+        if (query.isEmpty() || allItems.isEmpty()) {
+            return filtered;
+        }
+        
+        String lowerQuery = query.toLowerCase();
+        for (ItemModel item : allItems) {
+            if (item == null) continue;
+            
+            // Search in title
+            boolean matches = false;
+            if (item.getTitle() != null && item.getTitle().toLowerCase().contains(lowerQuery)) {
+                matches = true;
+            }
+            // Search in description
+            else if (item.getDescription() != null && item.getDescription().toLowerCase().contains(lowerQuery)) {
+                matches = true;
+            }
+            // Search in extra
+            else if (item.getExtra() != null && item.getExtra().toLowerCase().contains(lowerQuery)) {
+                matches = true;
+            }
+            
+            if (matches) {
+                filtered.add(item);
+            }
+        }
+        return filtered;
+    }
+
+    private void updateSearchResults(List<ItemModel> filtered) {
+        // Create new adapter with filtered results
+        searchAdapter = new SearchResultAdapter(ctx, filtered);
+        binding.searchResultsRecyclerView.setAdapter(searchAdapter);
+    }
+
+    private void showOriginalContent() {
+        binding.searchResultsRecyclerView.setVisibility(View.GONE);
+        binding.searchResultsRecyclerView.animate().alpha(0f).setDuration(200).start();
+        
+        binding.banner.setVisibility(View.VISIBLE);
+        binding.banner.animate().alpha(1f).setDuration(300).start();
+        binding.tvCategories.setVisibility(View.VISIBLE);
+        binding.tvCategories.animate().alpha(1f).setDuration(300).start();
+        binding.categoryTitle.setVisibility(View.VISIBLE);
+        binding.categoryTitle.animate().alpha(1f).setDuration(300).start();
+        binding.popularHeader.setVisibility(View.VISIBLE);
+        binding.popularHeader.animate().alpha(1f).setDuration(300).start();
+        binding.recyclerViewPopular.setVisibility(View.VISIBLE);
+        binding.recyclerViewPopular.animate().alpha(1f).setDuration(300).start();
+    }
+
+    private void showSearchResults() {
+        binding.banner.setVisibility(View.GONE);
+        binding.banner.animate().alpha(0f).setDuration(200).start();
+        binding.tvCategories.setVisibility(View.GONE);
+        binding.tvCategories.animate().alpha(0f).setDuration(200).start();
+        binding.categoryTitle.setVisibility(View.GONE);
+        binding.categoryTitle.animate().alpha(0f).setDuration(200).start();
+        binding.popularHeader.setVisibility(View.GONE);
+        binding.popularHeader.animate().alpha(0f).setDuration(200).start();
+        binding.recyclerViewPopular.setVisibility(View.GONE);
+        binding.recyclerViewPopular.animate().alpha(0f).setDuration(200).start();
+        
+        binding.searchResultsRecyclerView.setVisibility(View.VISIBLE);
+        binding.searchResultsRecyclerView.setAlpha(0f);
+        binding.searchResultsRecyclerView.animate().alpha(1f).setDuration(300).start();
     }
 }

@@ -3,7 +3,7 @@
     <string name="CHOOSE" />
     <string name="choose_your_favorite_coffee">Choose your favorite coffee</string>
     <string name="get_started">Get Started</string>
-    <string name="Search_Anything">Search Anything...</string>
+    <string name="Search_Anything">Search Anything</string>
 
     <!-- Strings extracted from activity_main2.xml -->
     <string name="welcome_user">hi user welcome back</string>
@@ -16,6 +16,37 @@
     <string name="nav_my_order">My Order</string>
     <string name="nav_profile">Order</string>
 
+    <!-- General -->
+    <string name="back_button">&lt; Back</string>
+    <string name="loading">Loading</string>
+    <string name="currency_symbol">$</string>
+    <string name="search_hint">Search Anything</string>
+    <string name="title_categories">Categories</string>
+    <string name="title_popular">Popular Coffees</string>
+    <string name="action_see_all">See all</string>
+
+    <!-- Activity List (The file you just shared) -->
+    <string name="title_list">List</string>
+
+    <!-- Cart & Item Cart -->
+    <string name="title_cart">My Cart</string>
+    <string name="cart_item_placeholder_title">Cappuccino</string>
+    <string name="cart_item_placeholder_price">$0</string>
+    <string name="cart_quantity_minus">-</string>
+    <string name="cart_quantity_plus">+</string>
+    <string name="cart_quantity_default">1</string>
+    <string name="cart_desc_decrease">Decrease quantity</string>
+    <string name="cart_desc_increase">Increase quantity</string>
+    <string name="cart_desc_remove">Remove item</string>
+    
+    <!-- Cart Summary -->
+    <string name="label_subtotal">Subtotal</string>
+    <string name="label_delivery">Delivery</string>
+    <string name="label_tax">Tax</string>
+    <string name="label_total">Total</string>
+    <string name="btn_checkout">Checkout</string>
+    <string name="nav_orders">My Order</string>
+
 
     <!-- <string name="app_name">Coffee Shop</string> -->
 
@@ -24,4 +55,12 @@
     <!-- <string name="app_name">Coffee Shop</string> -->
 
     <!-- <string name="Search_Anything">Search Anything</string> -->
+
+    <!-- <string name="app_name">Coffee Shop</string> -->
+
+
+    <!-- Activity Main 2 (Home Screen) -->
+    <!-- <string name="welcome_user">Hi User, Welcome Back</string> -->
+
+    <!-- <string name="nav_profile">Profile</string> -->
 </resources>
