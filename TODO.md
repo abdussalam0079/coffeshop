@@ -1,17 +1,7 @@
-# TODO: Make Search Layout Functional in MainActivity2
+ # Splash Screen Enhancement TODO
 
-## Completed Tasks
-- [x] Added RecyclerView for search results in activity_main2.xml
-- [x] Added necessary imports and fields in MainActivity2.java
-- [x] Implemented initSearch() method with TextWatcher for real-time search
-- [x] Added logic to toggle visibility between search results and original content
-- [x] Integrated filtering by title, description, and extra fields
-- [x] Implemented showOriginalContent() and showSearchResults() methods
-- [x] Added performSearch method to filter items based on query
-- [x] Completed full implementation of search functionality
-
-## Next Steps
-- [x] Test the search functionality with various queries
-- [x] Ensure smooth UI transitions when switching between search and normal view
-- [x] Verify that all items from Firebase are loaded and searchable
-- [x] Check for any potential performance issues with large item lists
+- [x] Modify activity_splash_screen.xml: Remove ViewPager2, indicators, skip button. Add full-screen background image with blend, welcoming text, and "Get Started" button.
+- [x] Update SplashScreen.java: Remove onboarding logic, add fade-in animations to text and button, handle button click and auto-navigate.
+- [x] Create blended background drawable if needed.
+- [ ] Test animations and navigation.
+sh

@@ -26,4 +26,16 @@
     <!-- Dark Brown Shades -->
     <color name="dark_brown">#4B2E16</color>
     <color name="deep_brown">#3B2419</color>
+
+    <!-- Magical Night Colors -->
+    <color name="night_sky">#000000</color>
+    <color name="magical_blue">#6BF0FF</color>
+    <color name="magical_cyan">#23F0FF</color>
+    <color name="magical_teal">#159FAA</color>
+    <color name="magical_dark_teal">#14757A</color>
+    <color name="magical_light_teal">#39C6D6</color>
+    <color name="flower_white">#FFFFFF</color>
+    <color name="flower_light_blue">#A7FFEE</color>
+    <color name="flower_dark_blue">#54B8AA</color>
+    <color name="sparkle_yellow">#FFFB00</color>
 </resources>

@@ -63,4 +63,9 @@
     <!-- <string name="welcome_user">Hi User, Welcome Back</string> -->
 
     <!-- <string name="nav_profile">Profile</string> -->
+
+    <!-- No Internet Screen -->
+    <string name="no_internet_title">No Internet Connection</string>
+    <string name="no_internet_message">Please check your internet connection and try again.</string>
+    <string name="retry">Retry</string>
 </resources>

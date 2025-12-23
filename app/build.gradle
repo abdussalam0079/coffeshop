@@ -1,4 +1,4 @@
-import java.net.URL
+// No longer need 'import java.net.URL' at the top
 
 plugins {
     alias(libs.plugins.android.application)
@@ -33,6 +33,11 @@ android {
         viewBinding true
         mlModelBinding true
     }
+
+    // This is correct: Prevents TFLite model from being compressed, which avoids crashes.
+    aaptOptions {
+        noCompress "tflite"
+    }
 }
 
 dependencies {
@@ -44,35 +49,21 @@ dependencies {
     implementation libs.constraintlayout
     implementation libs.recyclerview
     implementation libs.firebase.auth
-    implementation libs.tensorflow.lite.support
-    implementation libs.tensorflow.lite.metadata
+    
+    // ViewPager2 for swipeable onboarding screens
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.8.3'
+    // TensorFlow Lite - only core library needed
+    // Removed tensorflow-lite-support and tensorflow-lite-metadata as they're not used in code
+    // and cause duplicate class errors with litert-api
+    // The code only uses org.tensorflow.lite.Interpreter which is in the core library
+    implementation 'org.tensorflow:tensorflow-lite:2.17.0'
+    
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+
+    // This is correct: Glide version is now consistent.
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
-    
-    // TensorFlow Lite
-    implementation 'org.tensorflow:tensorflow-lite:2.17.0'
 }
-
-// Download a real pretrained emotion model into assets at build time.
-tasks.register("downloadEmotionModel") {
-    doLast {
-        def url = "https://github.com/onnx/models/raw/main/vision/body_analysis/emotion_ferplus/model/emotion-ferplus-8.tflite"
-        // Honor a user-provided model.tflite; only download if missing
-        def userModel = file("src/main/assets/model.tflite")
-        if (userModel.exists()) {
-            println "User-provided model.tflite found; skipping download."
-            return
-        }
-        def out = file("src/main/assets/emotion_model.tflite")
-        out.parentFile.mkdirs()
-        new URL(url).withInputStream { input ->
-            out.withOutputStream { output -> output << input }
-        }
-        println "Downloaded emotion model to ${out}"
-    }
-}
-
-preBuild.dependsOn(downloadEmotionModel)

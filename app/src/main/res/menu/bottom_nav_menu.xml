@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/btn1"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_favorites"
+        android:icon="@drawable/btn3"
+        android:title="Favorites" />
+
+    <item
+        android:id="@+id/nav_mood_scan"
+        android:icon="@drawable/btn4"
+        android:title="Scan Mood" />
+
+    <item
+        android:id="@+id/nav_cart"
+        android:icon="@drawable/btn2"
+        android:title="Cart" />
+</menu>

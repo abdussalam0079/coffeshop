@@ -1,12 +1,16 @@
 package com.example.coffeshop2.Activity;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +30,7 @@ public class MainActivity2 extends AppCompatActivity {
     private Context ctx;
     private List<ItemModel> allItems = new ArrayList<>();
     private RecyclerView.Adapter<?> searchAdapter;
+    private View currentSelectedNav = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,20 +110,113 @@ public class MainActivity2 extends AppCompatActivity {
     //  BOTTOM NAVIGATION
     // =======================
     private void initBottomNav() {
-        binding.navExplore.setOnClickListener(v ->
-                startActivity(new Intent(this, MainActivity2.class)));
+        // Set initial selected state (Explore is selected by default)
+        setNavItemSelected(binding.navExplore, binding.navExploreIcon, binding.navExploreText);
 
-        binding.navCart.setOnClickListener(v ->
-                startActivity(new Intent(this, CartActivity.class)));
+        binding.navExplore.setOnClickListener(v -> {
+            animateNavClick(binding.navExplore, binding.navExploreIcon, binding.navExploreText);
+            startActivity(new Intent(this, MainActivity2.class));
+        });
 
-        binding.navWishlist.setOnClickListener(v ->
-                startActivity(new Intent(this, FavItemActivity.class)));
+        binding.navCart.setOnClickListener(v -> {
+            animateNavClick(binding.navCart, binding.navCartIcon, binding.navCartText);
+            startActivity(new Intent(this, CartActivity.class));
+        });
 
-        binding.navOrders.setOnClickListener(v ->
-                startActivity(new Intent(this, OrdersActivity.class)));
+        binding.navWishlist.setOnClickListener(v -> {
+            animateNavClick(binding.navWishlist, binding.navWishlistIcon, binding.navWishlistText);
+            startActivity(new Intent(this, FavItemActivity.class));
+        });
 
-        binding.navProfile.setOnClickListener(v ->
-                startActivity(new Intent(this, RecommendationActivity.class)));
+        binding.navOrders.setOnClickListener(v -> {
+            animateNavClick(binding.navOrders, binding.navOrdersIcon, binding.navOrdersText);
+            startActivity(new Intent(this, OrdersActivity.class));
+        });
+
+        binding.navProfile.setOnClickListener(v -> {
+            animateNavClick(binding.navProfile, binding.navProfileIcon, binding.navProfileText);
+            startActivity(new Intent(this, RecommendationActivity.class));
+        });
+    }
+
+    private void animateNavClick(View navItem, View icon, View text) {
+        // Reset previous selection
+        if (currentSelectedNav != null && currentSelectedNav != navItem) {
+            resetNavItem(currentSelectedNav);
+        }
+
+        // Scale animation for icon
+        AnimatorSet iconAnimator = new AnimatorSet();
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(icon, "scaleX", 1f, 0.8f, 1.1f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(icon, "scaleY", 1f, 0.8f, 1.1f, 1f);
+        iconAnimator.playTogether(scaleX, scaleY);
+        iconAnimator.setDuration(300);
+        iconAnimator.setInterpolator(new DecelerateInterpolator());
+        iconAnimator.start();
+
+        // Scale animation for text
+        AnimatorSet textAnimator = new AnimatorSet();
+        ObjectAnimator textScaleX = ObjectAnimator.ofFloat(text, "scaleX", 1f, 0.9f, 1.05f, 1f);
+        ObjectAnimator textScaleY = ObjectAnimator.ofFloat(text, "scaleY", 1f, 0.9f, 1.05f, 1f);
+        textAnimator.playTogether(textScaleX, textScaleY);
+        textAnimator.setDuration(300);
+        textAnimator.setInterpolator(new DecelerateInterpolator());
+        textAnimator.start();
+
+        // Set as selected
+        setNavItemSelected(navItem, icon, text);
+        currentSelectedNav = navItem;
+    }
+
+    private void setNavItemSelected(View navItem, View icon, View text) {
+        // Set selected background
+        navItem.setBackgroundResource(com.example.coffeshop2.R.drawable.nav_item_selected);
+        // Change text color to orange for selected state
+        if (text instanceof android.widget.TextView) {
+            ((android.widget.TextView) text).setTextColor(ContextCompat.getColor(this, com.example.coffeshop2.R.color.orange));
+            ((android.widget.TextView) text).setTextSize(12);
+            ((android.widget.TextView) text).setTypeface(null, android.graphics.Typeface.BOLD);
+        }
+        // Slightly scale up icon
+        icon.setScaleX(1.15f);
+        icon.setScaleY(1.15f);
+    }
+
+    private void resetNavItem(View navItem) {
+        View icon = null;
+        View text = null;
+
+        // Find icon and text views based on navItem
+        if (navItem == binding.navExplore) {
+            icon = binding.navExploreIcon;
+            text = binding.navExploreText;
+        } else if (navItem == binding.navCart) {
+            icon = binding.navCartIcon;
+            text = binding.navCartText;
+        } else if (navItem == binding.navWishlist) {
+            icon = binding.navWishlistIcon;
+            text = binding.navWishlistText;
+        } else if (navItem == binding.navOrders) {
+            icon = binding.navOrdersIcon;
+            text = binding.navOrdersText;
+        } else if (navItem == binding.navProfile) {
+            icon = binding.navProfileIcon;
+            text = binding.navProfileText;
+        }
+
+        if (icon != null && text != null && navItem != null) {
+            // Reset background
+            navItem.setBackgroundResource(com.example.coffeshop2.R.drawable.nav_item_background);
+            // Reset icon scale
+            icon.setScaleX(1f);
+            icon.setScaleY(1f);
+            // Reset text color and style
+            if (text instanceof android.widget.TextView) {
+                ((android.widget.TextView) text).setTextColor(ContextCompat.getColor(this, com.example.coffeshop2.R.color.dark_brown));
+                ((android.widget.TextView) text).setTextSize(11);
+                ((android.widget.TextView) text).setTypeface(null, android.graphics.Typeface.NORMAL);
+            }
+        }
     }
 
     // =======================
