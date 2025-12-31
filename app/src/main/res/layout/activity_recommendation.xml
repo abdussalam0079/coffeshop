@@ -84,11 +84,19 @@
                         android:scaleType="centerCrop"
                         android:background="@drawable/full_white_bg"
                         android:visibility="gone" />
+                    
+                    <!-- Live camera preview for real-time mood detection -->
+                    <androidx.camera.view.PreviewView
+                        android:id="@+id/previewView"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="16dp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Take a selfie to get mood-based coffee recommendations!"
+                        android:text="Start camera for real-time mood detection and coffee recommendations!"
                         android:textColor="@color/dark_brown"
                         android:textSize="14sp"
                         android:textAlignment="center"
@@ -125,6 +133,34 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:visibility="gone" />
+                    
+                    <!-- Preview action buttons (shown when opened from product image) -->
+                    <LinearLayout
+                        android:id="@+id/previewButtons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="12dp"
+                        android:visibility="gone">
+
+                        <Button
+                            android:id="@+id/runFaceButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:text="Run Face Mood"
+                            android:textColor="@color/white"
+                            android:background="@drawable/bg_category_selected" />
+
+                        <Button
+                            android:id="@+id/runProductButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Run Product Match"
+                            android:textColor="@color/white"
+                            android:background="@drawable/bg_category_selected" />
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

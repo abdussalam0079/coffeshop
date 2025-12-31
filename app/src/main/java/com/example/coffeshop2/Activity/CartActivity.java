@@ -6,16 +6,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.coffeshop2.Domain.CartModel;
+import com.example.coffeshop2.Domain.OrderModel;
+import com.example.coffeshop2.Repository.MainRepositry;
 import com.example.coffeshop2.Utils.CartManager;
 import com.example.coffeshop2.Utils.UserManager;
-import com.example.coffeshop2.Repository.MainRepositry;
-import com.example.coffeshop2.Domain.OrderModel;
 import com.example.coffeshop2.databinding.ActivityCartBinding;
-import com.example.coffeshop2.Domain.CartModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,19 +148,11 @@ public class CartActivity extends AppCompatActivity implements CartItemAdapter.O
         OrderModel order = new OrderModel(
                 null, // Will be set by Firebase
                 userId, // User ID
-                "Customer", // Default customer name (can be updated later)
-                "", // Phone (can be added later)
-                "", // Email (can be added later)
-                "", // Delivery address (can be added later)
                 cartItems,
-                subtotal,
-                deliveryFee,
-                tax,
                 total,
-                discountCode,
                 "pending", // Order status
                 System.currentTimeMillis(), // Timestamp
-                "" // Notes
+                "" // Delivery address
         );
 
         // Save order to Firebase with user-based structure

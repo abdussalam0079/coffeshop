@@ -3,11 +3,14 @@ package com.example.coffeshop2.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import com.example.coffeshop2.databinding.ActivityFavItemBinding;
+
 import com.example.coffeshop2.Domain.ItemModel;
 import com.example.coffeshop2.Utils.WishlistManager;
+import com.example.coffeshop2.databinding.ActivityFavItemBinding;
+
 import java.util.List;
 
 public class FavItemActivity extends AppCompatActivity {

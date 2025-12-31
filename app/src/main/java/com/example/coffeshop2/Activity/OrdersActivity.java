@@ -7,14 +7,12 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeshop2.Utils.UserManager;
 import com.example.coffeshop2.ViewModel.MainViewModel;
 import com.example.coffeshop2.databinding.ActivityOrdersBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class OrdersActivity extends AppCompatActivity {
 

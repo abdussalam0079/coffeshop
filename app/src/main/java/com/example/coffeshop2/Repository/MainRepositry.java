@@ -8,18 +8,16 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.coffeshop2.Domain.BannerModel;
 import com.example.coffeshop2.Domain.CategoryModel;
-import com.example.coffeshop2.Domain.PopularModel;
 import com.example.coffeshop2.Domain.ItemModel;
 import com.example.coffeshop2.Domain.OrderModel;
-import com.example.coffeshop2.Utils.UserManager;
+import com.example.coffeshop2.Domain.PopularModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,8 +67,15 @@ public class MainRepositry {
                 List<BannerModel> list = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    BannerModel item = child.getValue(BannerModel.class);
-                    if (item != null) list.add(item);
+                    try {
+                        BannerModel item = child.getValue(BannerModel.class);
+                        if (item != null) {
+                            list.add(item);
+                        }
+                    } catch (Exception e) {
+                        Log.w(TAG, "Failed to parse banner item: " + child.getKey() + ", error: " + e.getMessage());
+                        // Skip this item and continue
+                    }
                 }
 
                 listData.postValue(list);
@@ -105,8 +110,15 @@ public class MainRepositry {
                 List<CategoryModel> list = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    CategoryModel item = child.getValue(CategoryModel.class);
-                    if (item != null) list.add(item);
+                    try {
+                        CategoryModel item = child.getValue(CategoryModel.class);
+                        if (item != null) {
+                            list.add(item);
+                        }
+                    } catch (Exception e) {
+                        Log.w(TAG, "Failed to parse category item: " + child.getKey() + ", error: " + e.getMessage());
+                        // Skip this item and continue
+                    }
                 }
 
                 listData.postValue(list);
@@ -140,8 +152,15 @@ public class MainRepositry {
                 List<PopularModel> list = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    PopularModel item = child.getValue(PopularModel.class);
-                    if (item != null) list.add(item);
+                    try {
+                        PopularModel item = child.getValue(PopularModel.class);
+                        if (item != null) {
+                            list.add(item);
+                        }
+                    } catch (Exception e) {
+                        Log.w(TAG, "Failed to parse popular item: " + child.getKey() + ", error: " + e.getMessage());
+                        // Skip this item and continue
+                    }
                 }
 
                 listData.postValue(list);
@@ -175,8 +194,15 @@ public class MainRepositry {
                 List<ItemModel> list = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    ItemModel item = child.getValue(ItemModel.class);
-                    if (item != null) list.add(item);
+                    try {
+                        ItemModel item = child.getValue(ItemModel.class);
+                        if (item != null) {
+                            list.add(item);
+                        }
+                    } catch (Exception e) {
+                        Log.w(TAG, "Failed to parse item: " + child.getKey() + ", error: " + e.getMessage());
+                        // Skip this item and continue
+                    }
                 }
 
                 listData.postValue(list);
@@ -302,16 +328,21 @@ public class MainRepositry {
                 List<OrderModel> list = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    OrderModel item = child.getValue(OrderModel.class);
-                    if (item != null) {
-                        // Ensure orderId and userId are set
-                        if (item.getOrderId() == null || item.getOrderId().isEmpty()) {
-                            item.setOrderId(child.getKey());
+                    try {
+                        OrderModel item = child.getValue(OrderModel.class);
+                        if (item != null) {
+                            // Ensure orderId and userId are set
+                            if (item.getOrderId() == null || item.getOrderId().isEmpty()) {
+                                item.setOrderId(child.getKey());
+                            }
+                            if (item.getUserId() == null || item.getUserId().isEmpty()) {
+                                item.setUserId(userId);
+                            }
+                            list.add(item);
                         }
-                        if (item.getUserId() == null || item.getUserId().isEmpty()) {
-                            item.setUserId(userId);
-                        }
-                        list.add(item);
+                    } catch (Exception e) {
+                        Log.w(TAG, "Failed to parse order: " + child.getKey() + ", error: " + e.getMessage());
+                        // Skip this item and continue
                     }
                 }
 

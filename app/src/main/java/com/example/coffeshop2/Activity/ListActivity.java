@@ -1,6 +1,5 @@
 package com.example.coffeshop2.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -8,11 +7,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.coffeshop2.Domain.ItemModel;
 import com.example.coffeshop2.ViewModel.MainViewModel;
 import com.example.coffeshop2.databinding.ActivityListBinding;
-import com.example.coffeshop2.Domain.ItemModel;
 
 import java.util.ArrayList;
 import java.util.List;

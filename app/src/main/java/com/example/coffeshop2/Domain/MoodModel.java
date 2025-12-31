@@ -1,38 +1,39 @@
 package com.example.coffeshop2.Domain;
 
 public class MoodModel {
-    private String moodId;
-    private String detectedMood; // "happy", "sad", "energetic", "calm", "stressed", "neutral"
-    private String recommendedCoffee;
-    private String imageUrl; // Selfie URL stored in Firebase Storage
+    private String id;
+    private String mood;
+    private String recommendation;
+    private String imageUrl;
     private long timestamp;
-    private String userId; // Optional: for tracking user
+    private String userId;
 
-    public MoodModel() {
-        // Required empty constructor for Firebase
-    }
+    public MoodModel() {}
 
-    public MoodModel(String moodId, String detectedMood, String recommendedCoffee, String imageUrl, long timestamp, String userId) {
-        this.moodId = moodId;
-        this.detectedMood = detectedMood;
-        this.recommendedCoffee = recommendedCoffee;
+    public MoodModel(String id, String mood, String recommendation, String imageUrl, long timestamp, String userId) {
+        this.id = id;
+        this.mood = mood;
+        this.recommendation = recommendation;
         this.imageUrl = imageUrl;
         this.timestamp = timestamp;
         this.userId = userId;
     }
 
-    public String getMoodId() { return moodId; }
-    public String getDetectedMood() { return detectedMood; }
-    public String getRecommendedCoffee() { return recommendedCoffee; }
-    public String getImageUrl() { return imageUrl; }
-    public long getTimestamp() { return timestamp; }
-    public String getUserId() { return userId; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public void setMoodId(String moodId) { this.moodId = moodId; }
-    public void setDetectedMood(String detectedMood) { this.detectedMood = detectedMood; }
-    public void setRecommendedCoffee(String recommendedCoffee) { this.recommendedCoffee = recommendedCoffee; }
+    public String getMood() { return mood; }
+    public void setMood(String mood) { this.mood = mood; }
+
+    public String getRecommendation() { return recommendation; }
+    public void setRecommendation(String recommendation) { this.recommendation = recommendation; }
+
+    public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public long getTimestamp() { return timestamp; }
     public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+
+    public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
 }
-

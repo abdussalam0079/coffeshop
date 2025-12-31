@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/zilhacoffeshop"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Coffeshop2">  <!-- ⭐ THIS IS THE FIX ⭐ -->
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">  <!-- ⭐ THIS IS THE FIX ⭐ -->
 
         <!-- Activities -->
         <activity
@@ -67,6 +67,7 @@
         <activity
             android:name=".Activity.NoInternetActivity"
             android:exported="false" />
+
     </application>
 
 </manifest>

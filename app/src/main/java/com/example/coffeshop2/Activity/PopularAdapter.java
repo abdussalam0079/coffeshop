@@ -14,10 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.coffeshop2.Domain.PopularModel;
 import com.example.coffeshop2.Domain.ItemModel;
-import com.example.coffeshop2.Utils.WishlistManager;
+import com.example.coffeshop2.Domain.PopularModel;
 import com.example.coffeshop2.R;
+import com.example.coffeshop2.Utils.WishlistManager;
 
 import java.util.List;
 

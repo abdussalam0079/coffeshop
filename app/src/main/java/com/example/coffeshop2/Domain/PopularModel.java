@@ -3,38 +3,49 @@ package com.example.coffeshop2.Domain;
 import java.util.List;
 
 public class PopularModel {
+    private String id;
     private String title;
     private String description;
     private String extra;
+    private List<String> picUrl;
     private double price;
     private double rating;
-    private List<String> picUrl;
+    private String category;
 
-    public PopularModel() {
-        // Required empty constructor for Firebase
-    }
+    public PopularModel() {}
 
-    public PopularModel(String title, String description, String extra, double price, double rating, List<String> picUrl) {
+    public PopularModel(String id, String title, String description, List<String> picUrl, double price, double rating, String category) {
+        this.id = id;
         this.title = title;
         this.description = description;
-        this.extra = extra;
+        this.extra = description;
+        this.picUrl = picUrl;
         this.price = price;
         this.rating = rating;
-        this.picUrl = picUrl;
+        this.category = category;
     }
 
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+
     public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public String getExtra() { return extra; }
-    public double getPrice() { return price; }
-    public double getRating() { return rating; }
-    public List<String> getPicUrl() { return picUrl; }
-
     public void setTitle(String title) { this.title = title; }
-    public void setDescription(String description) { this.description = description; }
-    public void setExtra(String extra) { this.extra = extra; }
-    public void setPrice(double price) { this.price = price; }
-    public void setRating(double rating) { this.rating = rating; }
-    public void setPicUrl(List<String> picUrl) { this.picUrl = picUrl; }
-}
 
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public String getExtra() { return extra; }
+    public void setExtra(String extra) { this.extra = extra; }
+
+    public List<String> getPicUrl() { return picUrl; }
+    public void setPicUrl(List<String> picUrl) { this.picUrl = picUrl; }
+
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
+
+    public double getRating() { return rating; }
+    public void setRating(double rating) { this.rating = rating; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+}

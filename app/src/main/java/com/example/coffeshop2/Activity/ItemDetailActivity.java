@@ -1,6 +1,5 @@
 package com.example.coffeshop2.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -8,15 +7,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.example.coffeshop2.databinding.ActivityItemDetailBinding;
-import com.example.coffeshop2.Domain.ItemModel;
 import com.example.coffeshop2.Domain.CartModel;
+import com.example.coffeshop2.Domain.ItemModel;
+import com.example.coffeshop2.R;
 import com.example.coffeshop2.Utils.CartManager;
 import com.example.coffeshop2.Utils.WishlistManager;
-import com.example.coffeshop2.R;
-import android.widget.Toast;
-
-import java.io.Serializable;
+import com.example.coffeshop2.databinding.ActivityItemDetailBinding;
 
 public class ItemDetailActivity extends AppCompatActivity {
 

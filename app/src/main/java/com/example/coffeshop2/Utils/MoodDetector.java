@@ -7,7 +7,7 @@ import android.util.Pair;
 
 /**
  * Mood Detector Utility
- * Maps detected emotions to coffee recommendations using TensorFlow Lite
+ * Maps detected emotions to coffee recommendations using Google ML Kit Face Detection
  */
 public class MoodDetector {
     
@@ -30,7 +30,7 @@ public class MoodDetector {
     }
     
     /**
-     * Initialize TensorFlow Lite model
+     * Initialize ML Kit Face Detection
      */
     public static void initialize(Context context) {
         if (!isInitialized) {
@@ -74,7 +74,7 @@ public class MoodDetector {
     }
     
     /**
-     * Detect mood index from image bitmap using TensorFlow Lite.
+     * Detect mood index from image bitmap using ML Kit Face Detection.
      */
     public static int detectMoodIndex(Bitmap image, Context context) {
         if (!isInitialized) {
@@ -97,7 +97,7 @@ public class MoodDetector {
     }
 
     /**
-     * Detect mood label from image bitmap using TensorFlow Lite.
+     * Detect mood label from image bitmap using ML Kit Face Detection.
      */
     public static String detectMood(Bitmap image, Context context) {
         int bucket = detectMoodIndex(image, context);
@@ -164,6 +164,33 @@ public class MoodDetector {
 
         Pair<String, String> rec = getRecommendation(moodBucket);
         return new MoodRecommendationResult(rawIdx, moodBucket, label, rec);
+    }
+    
+    /**
+     * Get recommendation directly from mood string (for real-time detection)
+     * Updated for 5 realistic emotions: HAPPY, SAD, NEUTRAL, TIRED, CALM
+     */
+    public static MoodRecommendationResult getRecommendationForMood(String mood) {
+        int moodBucket;
+        switch (mood.toLowerCase()) {
+            case "happy":
+                moodBucket = 0; // Energizing coffees
+                break;
+            case "sad":
+                moodBucket = 1; // Comforting coffees
+                break;
+            case "tired":
+                moodBucket = 2; // Strong/awakening coffees
+                break;
+            case "neutral":
+            case "calm":
+            default:
+                moodBucket = 3; // Balanced coffees
+                break;
+        }
+        
+        Pair<String, String> rec = getRecommendation(moodBucket);
+        return new MoodRecommendationResult(-1, moodBucket, mood, rec);
     }
     
     /**

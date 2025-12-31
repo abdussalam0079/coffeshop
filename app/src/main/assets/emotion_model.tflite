@@ -1,2 +1,0 @@
-public static final String MODEL_FILE = "emotion_model.tflite";
-
